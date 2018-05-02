@@ -1,0 +1,132 @@
+<!doctype html>
+<html ng-app="myapp">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width">
+	<title>拉勾网</title>
+	<style>
+		*{margin:0;padding:0;}
+		body,html{
+			width:100%;
+			height:100%;
+			font-size: 66.5%;
+		}
+		.fade{
+			position: absolute;
+			top:0;
+			left:0;
+			margin-top: 45px;
+			width:100%;
+			height:100%;
+			overflow-x:hidden; 
+		}
+		.fade.ng-enter{
+			animation:animate 1s;
+		}
+		@keyframes animate{
+			from{
+				opacity:0;
+			}
+			to{
+				opacity:1;
+			}
+		}
+		header{
+			height:45px;
+			text-align:center;
+			line-height:45px;
+		    background-color: #00b38a;
+			color:#fff;
+			font-size:1.8rem;
+		}
+		footer{
+			position: fixed;
+			left:0;
+			bottom:0;
+			width:100%;
+			height:45px;
+			text-align:center;
+			line-height: 45px;
+			background-color: #f6f6f6;
+		}
+		footer a{
+			width:33.3333333%;
+			display: block;
+			float:left;
+			text-decoration:none;
+			color:#c2cfcc;
+			font-size: 1.6rem;
+		}
+		footer a i{
+			display: inline-block;
+			background-image: url(images/icon2.png);
+			background-repeat: no-repeat;
+			background-size:250px 250px;
+			width:18px;
+			height:17px;
+		}
+		footer a:nth-child(1) i{
+			background-position: -32px -1px;
+		}
+		footer a:nth-child(2) i{
+			background-position: -14px -1px;
+		}
+		footer a:nth-child(3) i{
+			background-position: -55px -1px;
+		}
+	</style>
+</head>
+<body ng-controller="index">
+	<header>
+	拉勾网
+	</header>
+	<div ng-view class="fade"></div>
+	<footer>
+		<a href="#/job" class="focus"><i></i>职位</a>
+		<a href="#/search"><i></i>搜索</a>
+		<a href="#/mine"><i></i>我的</a>
+	</footer>
+	<script src="angular.js"></script>
+	<script src="angular-route.js"></script>
+	<script src="angular-animate.min.js"></script>
+	<script>
+		var myapp = angular.module("myapp",["ngAnimate","ngRoute"])
+			myapp.config(["$routeProvider",($routeProvider)=>{
+				$routeProvider.when("/job",{
+					templateUrl:"/job.html",
+					controller:"jobCtrl"
+				})
+				$routeProvider.when("/search",{
+					templateUrl:"/search.html",
+					controller:"searchsCtrl"
+				})
+				$routeProvider.when("/mine",{
+					templateUrl:"/mine.html",
+					controller:"mineCtrl"
+				})
+			}])
+			myapp.controller("index",function($scope,$http){
+				var get = $http.get("http://127.0.0.1:127/")
+				get.success((data)=>{
+					$scope.data = data.data
+				},(error)=>{
+					console.log(error)
+				})
+			})
+			myapp.controller("jobCtrl",function($scope,$http){
+				var get = $http.get("http://127.0.0.1:127/getData")
+				get.success((data)=>{
+					$scope.data = data
+				},(error)=>{
+					console.log(error)
+				})
+			})
+			myapp.controller("searchsCtrl",($scope,$http)=>{
+				$scope.data = "该页面为搜索页面"
+			})
+			myapp.controller("mineCtrl",($scope,$http)=>{
+				$scope.data = "该页面为我的页面"
+			})
+	</script>
+</body>
+</html>
